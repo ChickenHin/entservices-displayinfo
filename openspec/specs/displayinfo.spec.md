@@ -638,6 +638,20 @@ Electro-Optical Transfer Function in use on the primary video output.
 
 ---
 
+**Interface method:** `Exchange::IDisplayProperties::CurrentColorimetry(ColorimetryType&)`
+
+Active colorimetry standard of the HDMI output link, derived from the DS matrix coefficient of the active video port.
+
+| Condition | Value | Return code |
+|-----------|-------|-------------|
+| Display connected, known DS matrix coefficient (DeviceSettings) | Mapped `ColorimetryType` (e.g. `COLORIMETRY_BT2020RGB_YCBCR`) | `ERROR_NONE` |
+| Display connected, unknown DS matrix coefficient (DeviceSettings) | `COLORIMETRY_UNKNOWN` | `ERROR_NONE` |
+| Display not connected (DeviceSettings) | `COLORIMETRY_UNKNOWN` | `ERROR_NONE` |
+| `device::Exception` in DeviceSettings backend | `COLORIMETRY_UNKNOWN` | `ERROR_NONE` |
+| Linux / RPI backends | undefined | `ERROR_UNAVAILABLE` |
+
+---
+
 ### Configuration Object
 
 Configuration is injected via `IShell::ConfigLine()` and parsed per platform.

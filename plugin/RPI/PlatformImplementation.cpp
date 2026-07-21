@@ -251,6 +251,11 @@ public:
         return (Core::ERROR_UNAVAILABLE);
     }
 
+    Core::hresult CurrentColorimetry(ColorimetryType& /* @out */) const override
+    {
+        return (Core::ERROR_UNAVAILABLE);
+    }
+
     Core::hresult QuantizationRange(QuantizationRangeType&) const override
     {
         return (Core::ERROR_UNAVAILABLE);
