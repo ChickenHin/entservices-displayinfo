@@ -251,7 +251,7 @@ public:
         return (Core::ERROR_UNAVAILABLE);
     }
 
-    Core::hresult CurrentColorimetry(ColorimetryType& /* @out */) const override
+    Core::hresult GetCurrentColorimetry(ColorimetryTypeInfo& /* @out */) const override
     {
         return (Core::ERROR_UNAVAILABLE);
     }

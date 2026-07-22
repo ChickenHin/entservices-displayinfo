@@ -747,9 +747,9 @@ public:
         return ret;
     }
 
-    Core::hresult CurrentColorimetry(ColorimetryType& value /* @out */) const override
+    Core::hresult GetCurrentColorimetry(ColorimetryTypeInfo& info /* @out */) const override
     {
-        value = COLORIMETRY_UNKNOWN;
+        info.colorimetry = COLORIMETRY_UNKNOWN;
         try
         {
             device::List<device::VideoOutputPort> vPorts = device::Host::getInstance().getVideoOutputPorts();
@@ -759,37 +759,39 @@ public:
                 if (vPort.isDisplayConnected())
                 {
                     int matCoeff = vPort.getMatrixCoefficients();
-                    TRACE(Trace::Information, (_T("CurrentColorimetry: port=%s matrixCoefficients=%d"),
-                          vPort.getName().c_str(), matCoeff));
+                    LOGINFO("GetCurrentColorimetry: port=%s matrixCoefficients=%d",
+                          vPort.getName().c_str(), matCoeff);
                     switch (static_cast<dsDisplayMatrixCoefficients_t>(matCoeff))
                     {
                         case dsDISPLAY_MATRIXCOEFFICIENT_BT_709:
-                            value = COLORIMETRY_BT709; break;
+                            info.colorimetry = COLORIMETRY_BT709; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_SMPTE_170M:
-                            value = COLORIMETRY_SMPTE170M; break;
+                            info.colorimetry = COLORIMETRY_SMPTE170M; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_XvYCC_709:
-                            value = COLORIMETRY_XVYCC709; break;
+                            info.colorimetry = COLORIMETRY_XVYCC709; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_eXvYCC_601:
-                            value = COLORIMETRY_XVYCC601; break;
+                            info.colorimetry = COLORIMETRY_XVYCC601; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_NCL:
-                            value = COLORIMETRY_BT2020RGB_YCBCR; break;
+                            info.colorimetry = COLORIMETRY_BT2020RGB_YCBCR; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_CL:
-                            value = COLORIMETRY_BT2020YCCBCBRC; break;
+                            info.colorimetry = COLORIMETRY_BT2020YCCBCBRC; break;
+			case dsDISPLAY_MATRIXCOEFFICIENT_UNKNOWN:
+                            info.colorimetry = COLORIMETRY_UNKNOWN; break;
                         default:
-                            value = COLORIMETRY_OTHER; break;
+                            info.colorimetry = COLORIMETRY_OTHER; break;
                     }
                     break; // use the first active connected port
                 }
             }
-            if (value == COLORIMETRY_UNKNOWN)
+            if (info.colorimetry == COLORIMETRY_UNKNOWN)
             {
                 LOGERR("No active display connected, returning COLORIMETRY_UNKNOWN");
             }
         }
         catch (const device::Exception& err)
         {
-            LOGERR("DeviceSettings exception in CurrentColorimetry: %d, %s", err.getCode(), err.what());
-            value = COLORIMETRY_UNKNOWN;
+            LOGERR("DeviceSettings exception in GetCurrentColorimetry: %d, %s", err.getCode(), err.what());
+            info.colorimetry = COLORIMETRY_UNKNOWN;
         }
         return Core::ERROR_NONE;
     }
