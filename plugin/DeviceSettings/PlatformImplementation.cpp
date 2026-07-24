@@ -775,7 +775,7 @@ public:
                             info.colorimetry = COLORIMETRY_BT2020RGB_YCBCR; break;
                         case dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_CL:
                             info.colorimetry = COLORIMETRY_BT2020YCCBCBRC; break;
-			case dsDISPLAY_MATRIXCOEFFICIENT_UNKNOWN:
+                        case dsDISPLAY_MATRIXCOEFFICIENT_UNKNOWN:
                             info.colorimetry = COLORIMETRY_UNKNOWN; break;
                         default:
                             info.colorimetry = COLORIMETRY_OTHER; break;
