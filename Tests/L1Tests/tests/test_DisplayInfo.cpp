@@ -2270,9 +2270,6 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_DSUnknownSentinel)
     uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-<<<<<<< Updated upstream
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
-=======
     EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
 
     displayProperties->Release();
@@ -2306,7 +2303,6 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_GenuinelyUnmapped)
 
     EXPECT_EQ(result, Core::ERROR_NONE);
     EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_OTHER);
->>>>>>> Stashed changes
 
     displayProperties->Release();
 }
@@ -2343,7 +2339,7 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_NoDisplayConnected)
 TEST_F(DisplayInfoTestTest, CurrentColorimetry_DeviceException)
 {
     ON_CALL(*p_hostImplMock, getVideoOutputPorts())
-        .WillByDefault(::testing::Throw(device::Exception("getVideoOutputPorts failed", 1)));
+        .WillByDefault(::testing::Throw(device::Exception(1, "getVideoOutputPorts failed")));
 
     uint32_t _connectionId = 0;
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
