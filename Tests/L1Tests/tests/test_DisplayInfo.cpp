@@ -2079,11 +2079,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_BT709)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_BT709);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_BT709);
 
     displayProperties->Release();
 }
@@ -2109,11 +2110,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_BT2020NCL)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_BT2020RGB_YCBCR);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_BT2020RGB_YCBCR);
 
     displayProperties->Release();
 }
@@ -2139,11 +2141,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_BT2020CL)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_BT2020YCCBCBRC);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_BT2020YCCBCBRC);
 
     displayProperties->Release();
 }
@@ -2169,11 +2172,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_SMPTE170M)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_SMPTE170M);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_SMPTE170M);
 
     displayProperties->Release();
 }
@@ -2199,11 +2203,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_XvYCC709)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_XVYCC709);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_XVYCC709);
 
     displayProperties->Release();
 }
@@ -2229,19 +2234,20 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_XvYCC601)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_XVYCC601);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_XVYCC601);
 
     displayProperties->Release();
 }
 
 /**
- * @brief Test getCurrentColorimetry: display connected, unknown/unmapped matrix coefficient
+ * @brief Test getCurrentColorimetry: display connected, DS UNKNOWN sentinel matrix coefficient
  */
-TEST_F(DisplayInfoTestTest, CurrentColorimetry_UnknownCoefficient)
+TEST_F(DisplayInfoTestTest, CurrentColorimetry_DSUnknownSentinel)
 {
     device::VideoOutputPort videoOutputPort;
     std::string videoName = "HDMI-1";
@@ -2259,11 +2265,48 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_UnknownCoefficient)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_OTHER;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_OTHER);
+<<<<<<< Updated upstream
+    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
+=======
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
+
+    displayProperties->Release();
+}
+
+/**
+ * @brief Test getCurrentColorimetry: genuinely unmapped DS matrix coefficient returns COLORIMETRY_OTHER
+ */
+TEST_F(DisplayInfoTestTest, CurrentColorimetry_GenuinelyUnmapped)
+{
+    device::VideoOutputPort videoOutputPort;
+    std::string videoName = "HDMI-1";
+
+    ON_CALL(*p_hostImplMock, getVideoOutputPorts())
+        .WillByDefault(::testing::Return(std::vector<device::VideoOutputPort>({videoOutputPort})));
+    ON_CALL(*p_videoOutputPortMock, getName())
+        .WillByDefault(::testing::ReturnRef(videoName));
+    ON_CALL(*p_videoOutputPortMock, isDisplayConnected())
+        .WillByDefault(::testing::Return(true));
+    // Use a value that is not MATRIXCOEFFICIENT_UNKNOWN and has no explicit mapping — hits default branch
+    EXPECT_CALL(*p_videoOutputPortMock, getMatrixCoefficients())
+        .WillOnce(::testing::Return(static_cast<int>(9999)));
+
+    uint32_t _connectionId = 0;
+    Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
+    ASSERT_NE(displayProperties, nullptr);
+
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
+
+    EXPECT_EQ(result, Core::ERROR_NONE);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_OTHER);
+>>>>>>> Stashed changes
 
     displayProperties->Release();
 }
@@ -2284,11 +2327,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_NoDisplayConnected)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_BT709; // pre-set to non-unknown
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_BT709; // pre-set to non-unknown
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
 
     displayProperties->Release();
 }
@@ -2305,17 +2349,18 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_DeviceException)
     Exchange::IDisplayProperties* displayProperties = service.Root<Exchange::IDisplayProperties>(_connectionId, 2000, _T("DisplayInfoImplementation"));
     ASSERT_NE(displayProperties, nullptr);
 
-    Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_BT709;
-    uint32_t result = displayProperties->CurrentColorimetry(value);
+    Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+    info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_BT709;
+    uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
     EXPECT_EQ(result, Core::ERROR_NONE);
-    EXPECT_EQ(value, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
+    EXPECT_EQ(info.colorimetry, Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN);
 
     displayProperties->Release();
 }
 
 /**
- * @brief Test getCurrentColorimetry: all six DS matrix coefficient mappings (parameterised)
+ * @brief Test getCurrentColorimetry: all DS matrix coefficient mappings (parameterised)
  */
 TEST_F(DisplayInfoTestTest, CurrentColorimetry_AllMappings)
 {
@@ -2333,13 +2378,14 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_AllMappings)
         dsDisplayMatrixCoefficients_t input;
         Exchange::IDisplayProperties::ColorimetryType expected;
     } testCases[] = {
-        {dsDISPLAY_MATRIXCOEFFICIENT_BT_709,      Exchange::IDisplayProperties::COLORIMETRY_BT709},
-        {dsDISPLAY_MATRIXCOEFFICIENT_SMPTE_170M,  Exchange::IDisplayProperties::COLORIMETRY_SMPTE170M},
-        {dsDISPLAY_MATRIXCOEFFICIENT_XvYCC_709,   Exchange::IDisplayProperties::COLORIMETRY_XVYCC709},
-        {dsDISPLAY_MATRIXCOEFFICIENT_eXvYCC_601,  Exchange::IDisplayProperties::COLORIMETRY_XVYCC601},
-        {dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_NCL, Exchange::IDisplayProperties::COLORIMETRY_BT2020RGB_YCBCR},
-        {dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_CL,  Exchange::IDisplayProperties::COLORIMETRY_BT2020YCCBCBRC},
-        {dsDISPLAY_MATRIXCOEFFICIENT_UNKNOWN,      Exchange::IDisplayProperties::COLORIMETRY_OTHER},
+        {dsDISPLAY_MATRIXCOEFFICIENT_BT_709,                         Exchange::IDisplayProperties::COLORIMETRY_BT709},
+        {dsDISPLAY_MATRIXCOEFFICIENT_SMPTE_170M,                     Exchange::IDisplayProperties::COLORIMETRY_SMPTE170M},
+        {dsDISPLAY_MATRIXCOEFFICIENT_XvYCC_709,                      Exchange::IDisplayProperties::COLORIMETRY_XVYCC709},
+        {dsDISPLAY_MATRIXCOEFFICIENT_eXvYCC_601,                     Exchange::IDisplayProperties::COLORIMETRY_XVYCC601},
+        {dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_NCL,                    Exchange::IDisplayProperties::COLORIMETRY_BT2020RGB_YCBCR},
+        {dsDISPLAY_MATRIXCOEFFICIENT_BT_2020_CL,                     Exchange::IDisplayProperties::COLORIMETRY_BT2020YCCBCBRC},
+        {dsDISPLAY_MATRIXCOEFFICIENT_UNKNOWN,                        Exchange::IDisplayProperties::COLORIMETRY_UNKNOWN},
+        {static_cast<dsDisplayMatrixCoefficients_t>(9999),           Exchange::IDisplayProperties::COLORIMETRY_OTHER},
     };
 
     uint32_t _connectionId = 0;
@@ -2350,11 +2396,12 @@ TEST_F(DisplayInfoTestTest, CurrentColorimetry_AllMappings)
         EXPECT_CALL(*p_videoOutputPortMock, getMatrixCoefficients())
             .WillOnce(::testing::Return(static_cast<int>(tc.input)));
 
-        Exchange::IDisplayProperties::ColorimetryType value = Exchange::IDisplayProperties::COLORIMETRY_OTHER;
-        uint32_t result = displayProperties->CurrentColorimetry(value);
+        Exchange::IDisplayProperties::ColorimetryTypeInfo info;
+        info.colorimetry = Exchange::IDisplayProperties::COLORIMETRY_OTHER;
+        uint32_t result = displayProperties->GetCurrentColorimetry(info);
 
         EXPECT_EQ(result, Core::ERROR_NONE);
-        EXPECT_EQ(value, tc.expected);
+        EXPECT_EQ(info.colorimetry, tc.expected);
     }
 
     displayProperties->Release();
