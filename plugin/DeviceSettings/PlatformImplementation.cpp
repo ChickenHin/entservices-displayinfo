@@ -589,6 +589,8 @@ public:
     Core::hresult ColourDepth(ColourDepthType& colour /* @out */) const override
     {
         int ret = Core::ERROR_NONE;
+        colour = COLORDEPTH_UNKNOWN;
+        
         try
         {
             std::string strVideoPort = device::Host::getInstance().getDefaultVideoPortName();
@@ -613,8 +615,7 @@ public:
             else
             {
                 LOGERR("HDMI not connected!");
-                ret = Core::ERROR_GENERAL;
-            }
+             }
         }
         catch (const device::Exception& err)
         {
