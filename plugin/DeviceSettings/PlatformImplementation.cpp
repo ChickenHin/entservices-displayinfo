@@ -536,7 +536,7 @@ public:
             else
             {
                 LOGERR("HDMI not connected!");
-                ret = Core::ERROR_GENERAL;
+                cs = FORMAT_UNKNOWN;
             }
         }
         catch (const device::Exception& err)
