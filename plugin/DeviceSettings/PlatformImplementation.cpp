@@ -508,7 +508,7 @@ public:
     Core::hresult ColorSpace(ColourSpaceType& cs /* @out */) const override
     {
         int ret = Core::ERROR_NONE;
-        
+
         cs = FORMAT_UNKNOWN;
         try
         {
@@ -596,7 +596,7 @@ public:
     {
         int ret = Core::ERROR_NONE;
         colour = COLORDEPTH_UNKNOWN;
-        
+
         try
         {
             std::string strVideoPort = device::Host::getInstance().getDefaultVideoPortName();
@@ -635,7 +635,7 @@ public:
     {
         int ret = Core::ERROR_NONE;
         qr = QUANTIZATIONRANGE_UNKNOWN;
-        
+
         try
         {
             std::string strVideoPort = device::Host::getInstance().getDefaultVideoPortName();
@@ -880,7 +880,7 @@ public:
         if(capabilities & dsHDRSTANDARD_DolbyVision) hdrCapabilities.push_back(HDR_DOLBYVISION);
         if(capabilities & dsHDRSTANDARD_TechnicolorPrime) hdrCapabilities.push_back(HDR_TECHNICOLOR);
         if(capabilities & dsHDRSTANDARD_Invalid)hdrCapabilities.push_back(HDR_OFF);
-
+        if(capabilities & dsHDRSTANDARD_SDR) hdrCapabilities.push_back(HDR_SDR);
 
         type = Core::Service<HdrteratorImplementation>::Create<Exchange::IHDRProperties::IHDRIterator>(hdrCapabilities);
         return (type != nullptr ? Core::ERROR_NONE : Core::ERROR_GENERAL);
