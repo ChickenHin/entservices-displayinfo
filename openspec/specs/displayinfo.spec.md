@@ -212,7 +212,8 @@ Only one backend is compiled per build target.
 
 | Value | Meaning |
 |-------|---------|
-| `HDR_OFF` | SDR (no HDR) |
+| `HDR_OFF` | No HDR |
+| `HDR_SDR` | SDR |
 | `HDR_10` | HDR10 |
 | `HDR_10PLUS` | HDR10+ |
 | `HDR_HLG` | Hybrid Log-Gamma |
