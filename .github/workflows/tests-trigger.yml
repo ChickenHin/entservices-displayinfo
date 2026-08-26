@@ -3,10 +3,7 @@ permissions:
 name: main-workflow
 
 on:
-  push:
-    branches: [ main, develop, 'sprint/**', 'release/**' ]
-  pull_request:
-    branches: [ main, develop, 'sprint/**', 'release/**' ]
+  workflow_dispatch: 
 
 jobs:
   trigger-L1:
